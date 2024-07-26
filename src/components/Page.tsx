@@ -1,37 +1,43 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getData } from '../apiCalls';
-import PropTypes from 'prop-types';
+import getData from '../apiCalls';
 import Rule from './Rule';
 import Ability from './Ability';
 import Skill from './Skill';
 import Class from './Class';
 import Race from './Race';
+import { Page } from '../types'
 
-const Page = ({setError}) => {
+const Page = () => {
   const location = useLocation();
   const URL1 = location.pathname.split('/')[1];
   const URL2 = location.pathname.split('/')[2];
   const [page, setPage] = useState({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const PATHS = {
+  const PATHS: {[key: string]: string} = {
     'gameplay-basics': 'rule-sections',
     'abilities': 'ability-scores',
     'skills': 'skills',
     'races': 'races',
     'classes': 'classes'
-  }
+  } as const
 
   useEffect(() => {
     const secondUrl = PATHS[URL1] === 'ability-scores' ? URL2.slice(0, 3) : URL2;
-    getData(PATHS[URL1], secondUrl)
-    .then(res => setPage(res))
-    .then(() => setLoading(false))
-    .catch(err => setError(err))
+    async () => {
+      try {
+        const data = await getData(PATHS[URL1], secondUrl)
+        setPage(data)
+        setLoading(false)
+      } catch(error) {
+        setError(true)
+      }
+    }
   }, [])
 
-  const renderPage = (path) => {
+  const renderPage = (path: string) => {
     switch(path) {
       case 'gameplay-basics':
         return <Rule page={page} />
@@ -66,8 +72,4 @@ const Page = ({setError}) => {
 }
 
 export default Page;
-
-Page.propTypes = {
-  setError: PropTypes.func.isRequired
-}
 

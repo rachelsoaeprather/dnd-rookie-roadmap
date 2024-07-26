@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
+import { Rule } from '../types'
 
-const Rule = ({page}) => {
+const Rule = ( page: Rule ) => {
 
-  const formatSubheader = (phrase, index) => {
+  const formatSubheader = (phrase: string, index: number) => {
     const words = phrase.split(' ');
     const fixed = words.filter(word => !word.includes('#')).join(' ')
     return <p key={index} className='main--bold'>{fixed}</p>
@@ -20,12 +20,3 @@ const Rule = ({page}) => {
 }
 
 export default Rule;
-
-Rule.propTypes = {
-  page: PropTypes.shape({
-    "name": PropTypes.string,
-    "index": PropTypes.string,
-    "desc": PropTypes.string,
-    "url": PropTypes.string
-  })
-}
