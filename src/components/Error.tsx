@@ -1,3 +1,5 @@
+import React from 'react'
+
 const Error = () => {
   return (
     <main>
@@ -8,4 +10,4 @@ const Error = () => {
   )
 }
 
-export default Error;
+export default Error
